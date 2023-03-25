@@ -1,3 +1,5 @@
+
+#include "mbed.h"
 #ifndef FDB_LIQUID_CRYSTAL_I2C_H
 #define FDB_LIQUID_CRYSTAL_I2C_H
 
@@ -68,7 +70,7 @@ public:
      * @param lcd_rows  Number of rows your LCD display has.
      * @param charsize  The size in dots that the display has, use LCD_5x10DOTS or LCD_5x8DOTS.
      */
-    LiquidCrystal_I2C(unsigned char lcd_addr, unsigned char lcd_cols, unsigned char lcd_rows, unsigned char charsize = LCD_5x8DOTS);
+    LiquidCrystal_I2C(I2C &i2c, unsigned char lcd_addr, unsigned char lcd_cols, unsigned char lcd_rows, unsigned char charsize = LCD_5x8DOTS);
 
     /**
      * Set the LCD display in the correct begin state, must be called before anything else is done.
@@ -160,6 +162,7 @@ private:
     unsigned char _rows;
     unsigned char _charsize;
     unsigned char _backlightval;
+     I2C* _i2c;
 };
 
 #endif // FDB_LIQUID_CRYSTAL_I2C_H

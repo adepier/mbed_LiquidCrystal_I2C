@@ -1,5 +1,5 @@
 #include "LiquidCrystal_I2C.h"
-#include "mbed.h"
+
 
 // When the display powers up, it is configured as follows:
 //
@@ -21,9 +21,9 @@
 // LiquidCrystal constructor is called).
 
 
-I2C _i2c(PB_11, PB_10); // SDA, SCL
 
-LiquidCrystal_I2C::LiquidCrystal_I2C(unsigned char lcd_addr, unsigned char lcd_cols, unsigned char lcd_rows, unsigned char charsize)
+
+LiquidCrystal_I2C::LiquidCrystal_I2C(I2C &i2c, unsigned char lcd_addr, unsigned char lcd_cols, unsigned char lcd_rows, unsigned char charsize):_i2c(&i2c) 
 {
     _addr = lcd_addr;
     _cols = lcd_cols;
@@ -48,11 +48,11 @@ void LiquidCrystal_I2C::begin() {
     // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
     // according to datasheet, we need at least 40ms after power rises above 2.7V
     // before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
-    wait_ms(50);
+    ThisThread::sleep_for(50ms); 
 
     // Now we pull both RS and R/W low to begin commands
     expanderWrite(_backlightval);   // reset expanderand turn backlight off (Bit 8 =1)
-    wait_ms(1000);
+    ThisThread::sleep_for(1s);
 
     //put the LCD into 4 bit mode
     // this is according to the hitachi HD44780 datasheet
@@ -231,8 +231,8 @@ void LiquidCrystal_I2C::expanderWrite(unsigned char _data){
     //Wire.beginTransmission(_addr);
     //Wire.write((int)(_data) | _backlightval);
     //Wire.endTransmission();
-    _i2c.write(_addr, data_write, 1, 0);
-    _i2c.stop();
+    _i2c->write(_addr, data_write, 1, 0);
+    _i2c->stop();
 }
 
 void LiquidCrystal_I2C::pulseEnable(unsigned char _data){

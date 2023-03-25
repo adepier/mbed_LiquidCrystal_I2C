@@ -1,8 +1,15 @@
 #include "mbed.h"
 #include <LiquidCrystal_I2C.h>
-
+ //L432KC
+#define I2C_SDA PB_7
+#define I2C_SCL PB_6
+//L452RE
+//  #define I2C_SDA PB_9
+//  #define I2C_SCL PB_8
+ 
+I2C i2c(I2C_SDA , I2C_SCL );
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
-LiquidCrystal_I2C lcd(0x4E, 16, 2);
+LiquidCrystal_I2C lcd(i2c,0x4E, 16, 2);
 
 
 
